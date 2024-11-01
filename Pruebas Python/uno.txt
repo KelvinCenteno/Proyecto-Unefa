@@ -1,0 +1,25 @@
+# Crear una imagen transparente para el texto
+text_image3 = Image.new("RGBA", (400, 50), (255, 255, 255, 100)) #Con esta linea se maneja el fondo del texto
+draw3 = ImageDraw.Draw(text_image3) #Con esta linea creamos un lienzo para dibujar
+font3 = ImageFont.truetype("arialbd.ttf", 16) #Con esta linea establecemos la fuente de escritura en el lienzo
+draw.text((10, 10), "En caso de ", font=font3, fill=(255, 255, 255, 255)) #Dibujamos el texto sobre el lienzo con la fuente establecida
+# Convertir la imagen de texto a PhotoImage
+text_photo3 = ImageTk.PhotoImage(text_image3)
+# Añadir la imagen de texto al Canvas
+canvas.create_image(250, 400, image=text_photo3)
+
+
+
+# Definir el tamaño de la ventana
+ancho_ventana = 400
+alto_ventana = 300
+
+# Obtener el tamaño de la pantalla
+ancho_pantalla = Ventana.winfo_screenwidth()
+alto_pantalla = Ventana.winfo_screenheight()
+
+# Calcular la posición x, y para centrar la ventana
+posicion_x = int((ancho_pantalla / 2) - (ancho_ventana / 2))
+posicion_y = int((alto_pantalla / 2) - (alto_ventana / 2))
+# Ajustar las dimensiones y la posición de la ventana
+Ventana.geometry(f"{ancho_ventana}x{alto_ventana}+{posicion_x}+{posicion_y}")
