@@ -68,6 +68,40 @@ Img_Co = Img_Co.resize((100, 100))
 ConterTitle = ImageTk.PhotoImage(Img_Co)
 canvas.create_image(60, 80, image=ConterTitle)
 
+#def form_asignación(event):
+
+# Crear imagen de texto "USUARIO"
+text_Ger = Image.new("RGBA", (220, 60), (255, 255, 255, 0))
+draw22 = ImageDraw.Draw(text_Ger)
+fontGer = ImageFont.truetype("arialbd.ttf", 20)
+draw22.text((10, 10), "GERENCIA", font=fontGer, fill=(255, 255, 255, 255))
+Ger_photo2 = ImageTk.PhotoImage(text_Ger)
+canvas.create_image(560, 200, anchor=tk.CENTER, image=Ger_photo2)
+
+#Caja de Texto Usuario
+caja_usuario = tk.Entry(root)
+canvas.create_window(640, 191, window=caja_usuario)
+
+# Crear imagen de texto "CONTRASEÑA"
+text_image = Image.new("RGBA", (220, 50), (255, 255, 255, 0))
+draw = ImageDraw.Draw(text_image)
+font = ImageFont.truetype("arialbd.ttf", 16)
+draw.text((10, 10), "CONTRASEÑA", font=font, fill=(255, 255, 255, 255))
+text_photo = ImageTk.PhotoImage(text_image)
+canvas.create_image(225, 280, anchor=tk.CENTER, image=text_photo)
+
+#Caja de Texto Usuario
+caja_contra = tk.Entry(root, show="*")
+canvas.create_window(180, 310, window=caja_contra)
+
+# Crear imagen de texto para soporte técnico
+text_image3 = Image.new("RGBA", (400, 50), (255, 255, 255, 0))
+draw3 = ImageDraw.Draw(text_image3)
+font3 = ImageFont.truetype("arial.ttf", 10)
+draw3.text((10, 10), "En caso de algun inconveniente contactarse con Soporte Tecnico", font=font3, fill=(255, 255, 255, 255))
+text_photo3 = ImageTk.PhotoImage(text_image3)
+canvas.create_image(215, 450, anchor=tk.CENTER, image=text_photo3)
+
 # CREAR LISTA DE BOTONES LATERALES
 
 text_image2 = Image.new("RGBA", (500, 50), (255, 255, 255, 0))
@@ -182,7 +216,8 @@ def inicio():
     root.destroy()
     subprocess.run(['python','Login.py'])
    
-
+#def boton_video():
+    
 # Crear el menú desplegable
 img_close = Image.open("Cerrar_Sección.png")
 img_close = img_close.resize((20, 20))
@@ -209,15 +244,8 @@ usuario = canvas.create_image(ancho_ventana - 60, 20, image=ConterTitle2)
 # Vincular el evento de clic a la imagen del usuario
 canvas.tag_bind(usuario, "<Button-1>", show_menu)
 
-# Crear imagen del logo del usuario
-Img_Home = Image.open("Home.png")
-Img_Home = Img_Home.resize((30, 30))
-Home = ImageTk.PhotoImage(Img_Home)
-usuario = canvas.create_image(ancho_ventana - 950, 26, image=Home)
-
 # Ruta del vídeo
 video_path = 'VideoLogo2.mp4'
-
 # Cargar el vídeo
 cap = cv2.VideoCapture(video_path)
 if not cap.isOpened():
@@ -239,8 +267,16 @@ def update_frame():
     root.after(5, update_frame)  # Ajustar el intervalo de tiempo para mejorar la fluidez
 
 # Iniciar la actualización de frames
-update_frame()
+def Inicio_video(event):
+    update_frame()
 
+# Crear imagen del logo del usuario
+Img_Home = Image.open("Home.png")
+Img_Home = Img_Home.resize((30, 30))
+Home = ImageTk.PhotoImage(Img_Home)
+usuario2 = canvas.create_image(ancho_ventana - 950, 26, image=Home)
+
+canvas.tag_bind(usuario2, "<Button-1>", Inicio_video)
 
 root.mainloop()
 
