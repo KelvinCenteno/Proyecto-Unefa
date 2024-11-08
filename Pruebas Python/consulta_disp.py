@@ -36,12 +36,12 @@ Img_f = Img_f.resize((ancho_pantalla, alto_pantalla))
 fondo = ImageTk.PhotoImage(Img_f)
 canvas.create_image(0, 0, image=fondo, anchor="nw")
 
-text_Tit = Image.new("RGBA", (800, 60), (255, 255, 255, 0))
+text_Tit = Image.new("RGBA", (800, 90), (255, 255, 255, 0))
 drawTit = ImageDraw.Draw(text_Tit)
-fontTit = ImageFont.truetype("arialbd.ttf", 40)
-drawTit.text((10, 10), "CONSULTA DE BIENES NACIONALES DISPONIBLE", font=fontTit, fill=(255, 255, 255, 255))
+fontTit = ImageFont.truetype("arialbd.ttf", 35)
+drawTit.text((10, 10), "CONSULTA DE BIENES NACIONALES\nDISPONIBLE", font=fontTit, fill=(255, 255, 255, 255), align="center")
 Tit_photo2 = ImageTk.PhotoImage(text_Tit)
-canvas.create_image(ancho_ventana/2, 70, anchor=tk.CENTER, image=Tit_photo2)
+canvas.create_image(ancho_ventana/1.9, 70, anchor=tk.CENTER, image=Tit_photo2)
 
 # Crear imagen de texto "X" para cerrar la ventana
 text_image40 = Image.new("RGBA", (60, 50), (255, 255, 255, 0))

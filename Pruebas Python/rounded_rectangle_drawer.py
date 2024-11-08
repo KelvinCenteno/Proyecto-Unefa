@@ -1,9 +1,5 @@
 import tkinter as tk
-from PIL import Image, ImageDraw, ImageTk
-
-# rounded_rectangle_drawer.py
-
-from PIL import Image, ImageDraw, ImageTk
+from PIL import Image, ImageDraw, ImageFont, ImageTk
 
 class RoundedRectangleDrawer:
     def __init__(self, canvas, xy, radius, outline, width=300, height=200, line_width=1, position=(0, 0)):
@@ -18,6 +14,7 @@ class RoundedRectangleDrawer:
         self.img = Image.new('RGBA', (self.width, self.height), (255, 255, 255, 0))
         self.draw = ImageDraw.Draw(self.img)
         self.img_tk = None
+        self.image_id = None  # ID del objeto de imagen en el canvas
 
     def draw_rounded_rectangle_outline(self):
         x1, y1, x2, y2 = self.xy
@@ -37,5 +34,15 @@ class RoundedRectangleDrawer:
     def display_on_canvas(self):
         self.draw_rounded_rectangle_outline()
         self.img_tk = ImageTk.PhotoImage(self.img)
-        self.canvas.create_image(self.position[0], self.position[1], anchor="nw", image=self.img_tk)
+        # Crear la imagen en el canvas y guardar el ID
+        self.image_id = self.canvas.create_image(self.position[0], self.position[1], anchor="nw", image=self.img_tk)
 
+    def update_color(self, new_color):
+        self.outline = new_color  # Actualizar el color del contorno
+        self.img = Image.new('RGBA', (self.width, self.height), (255, 255, 255, 0))
+        self.draw = ImageDraw.Draw(self.img)
+        self.draw_rounded_rectangle_outline()
+        self.img_tk = ImageTk.PhotoImage(self.img)
+        # Actualizar la imagen en el canvas
+        if self.image_id is not None:
+            self.canvas.itemconfig(self.image_id, image=self.img_tk)

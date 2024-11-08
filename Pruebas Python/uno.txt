@@ -23,3 +23,171 @@ posicion_x = int((ancho_pantalla / 2) - (ancho_ventana / 2))
 posicion_y = int((alto_pantalla / 2) - (alto_ventana / 2))
 # Ajustar las dimensiones y la posición de la ventana
 Ventana.geometry(f"{ancho_ventana}x{alto_ventana}+{posicion_x}+{posicion_y}")
+
+import tkinter as tk
+from tkinter import Canvas, Menu
+from PIL import Image, ImageDraw, ImageFont, ImageTk
+
+def show_menu2(event):
+    # Mostrar el menú
+    menu2.post(event.x_root, event.y_root)
+    # Asociar el evento de movimiento del ratón para verificar la posición
+    root.bind("<Motion>", check_mouse_position)
+
+def check_mouse_position(event):
+    # Obtener la posición del ratón
+    x, y = event.x_root, event.y_root
+    # Obtener la posición y tamaño del menú
+    menu_x, menu_y, menu_width, menu_height = menu2.winfo_x(), menu2.winfo_y(), menu2.winfo_width(), menu2.winfo_height()
+    
+    # Verificar si el ratón está fuera del menú
+    if not (menu_x <= x <= menu_x + menu_width and menu_y <= y <= menu_y + menu_height):
+        menu2.unpost()  # Ocultar el menú
+        root.unbind("<Motion>")  # Desasociar el evento de movimiento del ratón
+
+# Crear la ventana principal
+root = tk.Tk()
+root.geometry("600x400")
+
+# Crear y configurar el Canvas
+canvas = Canvas(root, width=600, height=300, bg='white')
+canvas.pack(pady=20)
+
+# Crear el menú desplegable
+menu2 = Menu(root, tearoff=0, bg="firebrick4", fg="white")
+menu2.configure(font=("arial", 18))
+menu2.add_command(label="Bienes Disponibles", command=lambda: print("Bienes Disponibles"))
+menu2.add_separator()
+menu2.add_command(label="Bienes Asignados", command=lambda: print("Bienes Asignados"))
+
+# Crear la imagen de texto en el Canvas
+text_image4 = Image.new("RGBA", (200, 50), (255, 255, 255, 0))
+draw4 = ImageDraw.Draw(text_image4)
+font4 = ImageFont.truetype("arialbd.ttf", 26)
+draw4.text((10, 10), "CONSULTA", font=font4, fill=(255, 255, 255, 255), align="center")
+text_photo4 = ImageTk.PhotoImage(text_image4)
+cons = canvas.create_image(280, 450, anchor="e", image=text_photo4)
+
+# Asociar eventos al elemento de la imagen en el Canvas
+canvas.tag_bind(cons, "<Enter>", show_menu2)
+
+# Ejecutar la ventana principal
+root.mainloop()
+
+import tkinter as tk
+from tkinter import Canvas
+from PIL import Image, ImageDraw, ImageFont, ImageTk
+
+class RoundedRectangleDrawer:
+    def __init__(self, canvas, xy, radius, outline='black', line_width=1, position=(0, 0)):
+        self.canvas = canvas
+        self.xy = xy
+        self.radius = radius
+        self.outline = outline
+        self.line_width = line_width
+        self.position = position
+        self.rect = None
+
+    def display_on_canvas(self):
+        x1, y1, x2, y2 = self.xy
+        self.rect = self.canvas.create_oval(x1 + self.position[0], y1 + self.position[1],
+                                            x2 + self.position[0], y2 + self.position[1],
+                                            outline=self.outline, width=self.line_width)
+
+    import tkinter as tk
+from PIL import Image, ImageDraw, ImageFont, ImageTk
+
+class RoundedRectangleDrawer:
+    def __init__(self, canvas, xy, radius, outline, width=300, height=200, line_width=1, position=(0, 0)):
+        self.canvas = canvas
+        self.xy = xy
+        self.radius = radius
+        self.outline = outline
+        self.width = width
+        self.height = height
+        self.line_width = line_width
+        self.position = position  # Nueva propiedad para la posición
+        self.img = Image.new('RGBA', (self.width, self.height), (255, 255, 255, 0))
+        self.draw = ImageDraw.Draw(self.img)
+        self.img_tk = None
+        self.image_id = None  # ID del objeto de imagen en el canvas
+
+    def draw_rounded_rectangle_outline(self):
+        x1, y1, x2, y2 = self.xy
+
+        # Dibujar las cuatro esquinas redondeadas
+        self.draw.arc([x1, y1, x1 + 2 * self.radius, y1 + 2 * self.radius], 180, 270, fill=self.outline, width=self.line_width)
+        self.draw.arc([x2 - 2 * self.radius, y1, x2, y1 + 2 * self.radius], 270, 360, fill=self.outline, width=self.line_width)
+        self.draw.arc([x1, y2 - 2 * self.radius, x1 + 2 * self.radius, y2], 90, 180, fill=self.outline, width=self.line_width)
+        self.draw.arc([x2 - 2 * self.radius, y2 - 2 * self.radius, x2, y2], 0, 90, fill=self.outline, width=self.line_width)
+
+        # Dibujar los lados del rectángulo
+        self.draw.line([x1 + self.radius, y1, x2 - self.radius, y1], fill=self.outline, width=self.line_width)  # Línea superior
+        self.draw.line([x1 + self.radius, y2, x2 - self.radius, y2], fill=self.outline, width=self.line_width)  # Línea inferior
+        self.draw.line([x1, y1 + self.radius, x1, y2 - self.radius], fill=self.outline, width=self.line_width)  # Línea izquierda
+        self.draw.line([x2, y1 + self.radius, x2, y2 - self.radius], fill=self.outline, width=self.line_width)  # Línea derecha
+
+    def display_on_canvas(self):
+        self.draw_rounded_rectangle_outline()
+        self.img_tk = ImageTk.PhotoImage(self.img)
+        self.image_id = self.canvas.create_image(self.position[0], self.position[1], anchor="nw", image=self.img_tk)
+
+    def update_color(self, new_color):
+        self.outline = new_color  # Actualizar el color del contorno
+        self.img = Image.new('RGBA', (self.width, self.height), (255, 255, 255, 0))
+        self.draw = ImageDraw.Draw(self.img)
+        self.draw_rounded_rectangle_outline()
+        self.img_tk = ImageTk.PhotoImage(self.img)
+        self.canvas.itemconfig(self.image_id, image=self.img_tk)  # Actualizar la imagen en el canvas
+
+
+def highlight_image(event):
+    # Cambiar tamaño o iluminar la imagen
+    draw2.rectangle((0, 0, 500, 50), fill="yellow")
+    draw2.text((10, 10), "REGISTRO", font=font2, fill=(255, 255, 255, 255), align="center")
+    global text_photo2
+    text_photo2 = ImageTk.PhotoImage(text_image2)
+    canvas.itemconfig(cons, image=text_photo2)
+    # Cambiar color del objeto drawer
+    drawer.update_color('red')
+
+def reset_image(event):
+    # Restaurar la imagen original
+    draw2.rectangle((0, 0, 500, 50), fill=(255, 255, 255, 0))
+    draw2.text((10, 10), "REGISTRO", font=font2, fill=(255, 255, 255, 255), align="center")
+    global text_photo2
+    text_photo2 = ImageTk.PhotoImage(text_image2)
+    canvas.itemconfig(cons, image=text_photo2)
+    # Restaurar color del objeto drawer
+    drawer.update_color('white')
+
+# Crear la ventana principal
+root = tk.Tk()
+root.geometry("600x400")
+
+# Crear y configurar el Canvas
+canvas = Canvas(root, width=600, height=300, bg='white')
+canvas.pack(pady=20)
+
+# Crear el objeto RoundedRectangleDrawer y dibujar en el canvas
+xy = (20, 20, 285, 80)
+radius = 10
+line_width = 2  # Grosor de la línea
+position = (6, 200)
+drawer = RoundedRectangleDrawer(canvas, xy, radius, outline='white', line_width=line_width, position=position)
+drawer.display_on_canvas()
+
+# Crear la imagen de texto en el Canvas
+text_image2 = Image.new("RGBA", (500, 50), (255, 255, 255, 0))
+draw2 = ImageDraw.Draw(text_image2)
+font2 = ImageFont.truetype("arialbd.ttf", 26)
+draw2.text((10, 10), "REGISTRO", font=font2, fill=(255, 255, 255, 255), align="center")
+text_photo2 = ImageTk.PhotoImage(text_image2)
+cons = canvas.create_image(6, 200, anchor="nw", image=text_photo2)
+
+# Asociar eventos al elemento de la imagen en el Canvas
+canvas.tag_bind(cons, "<Enter>", highlight_image)
+canvas.tag_bind(cons, "<Leave>", reset_image)
+
+# Ejecutar la ventana principal
+root.mainloop()
