@@ -1,0 +1,35 @@
+scrip sql base de datos
+
+-- Database: postgres
+
+-- DROP DATABASE IF EXISTS postgres;
+
+CREATE DATABASE postgres
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Spanish_Latin America.1252'
+    LC_CTYPE = 'Spanish_Latin America.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+
+COMMENT ON DATABASE postgres
+    IS 'default administrative connection database';
+-- Crear la tabla de usuarios
+CREATE TABLE usuarios (
+    id SERIAL PRIMARY KEY,
+    usuario VARCHAR(50) NOT NULL UNIQUE,
+    contrasena VARCHAR(100) NOT NULL,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+SELECT * FROM usuarios;
+
+-- Insertar varios usuarios en la tabla `usuarios`
+INSERT INTO usuarios (usuario, contrasena) VALUES
+('usuario1', 'contrasena1'),
+('usuario2', 'contrasena2'),
+('usuario3', 'contrasena3'),
+('usuario4', 'contrasena4'),
+('usuario5', 'contrasena5');
