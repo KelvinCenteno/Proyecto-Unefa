@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import Canvas, Menu, ttk
+from tkinter import Canvas, Menu, ttk, messagebox
 import cv2, subprocess
 from PIL import Image, ImageTk, ImageDraw, ImageFont
 from rounded_rectangle_drawer import RoundedRectangleDrawer
@@ -153,7 +153,7 @@ canvas.create_image(100, 80, image=ConterTitle)
 def Generar_codigo():
     # Datos para generar el QR
     if caja_fecha.get() == "" or caja_prod.get()=="" or caja_usuario.get()=="":
-        print("campos estan vacios"+ caja_fecha.get())
+        messagebox.showerror("CAMPOS VACIOS", "NO PUEDE HABER NINGUN CAMPO EN BLANCO")
     else:
             datos = f"Ubicación: {caja_usuario.get()}\nProducto: {caja_prod.get()}"
             

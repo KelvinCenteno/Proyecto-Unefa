@@ -2,6 +2,52 @@ import tkinter as tk
 from PIL import Image, ImageTk, ImageDraw, ImageFont
 import subprocess
 from tkinter import messagebox
+import pg8000
+
+db_config = {
+    'database': 'postgres',
+    'user': 'postgres',
+    'password': 'admin',
+    'host': 'localhost',  # Cambia esto si tu base de datos está en otro servidor
+    'port': 5432          # Puerto por defecto de PostgreSQL
+}
+
+# Función para establecer la conexión
+def conectar():
+    try:
+        conexion = pg8000.connect(**db_config)
+        return conexion
+    except Exception as e:
+        print(f"Error al conectar a la base de datos: {e}")
+        return None
+
+# Función para validar usuario y contraseña
+def validar_usuario(usuario, contrasena):
+    conexion = conectar()
+    if not conexion:
+        return False
+
+    try:
+        cursor = conexion.cursor()
+        query = "SELECT 1 FROM usuarios WHERE usuario = %s AND contrasena = %s"
+        cursor.execute(query, (usuario, contrasena))
+        result = cursor.fetchone()
+        cursor.close()
+        conexion.close()
+        return result is not None
+    except Exception as e:
+        print(f"Error al validar usuario: {e}")
+        return False
+
+# Ejemplo de uso
+"""usuario = input("Nombre de usuario: ")
+contrasena = input("Contraseña: ")
+
+if validar_usuario(usuario, contrasena):
+    print("Acceso concedido")
+    # Aquí puedes continuar con el acceso
+else:
+    print("Acceso denegado")"""
 
 Ventana = tk.Tk()
 Ventana.title("Prueba")
@@ -14,31 +60,30 @@ def cargar_usuarios():
     usuarios = {} 
     with open('usuarios.txt', 'r') as archivo: 
         for linea in archivo: 
-            usuario, contrasena = linea.strip().split(',') 
+            usuario= caja_usuario.get() 
             usuarios[usuario] = contrasena 
     return usuarios 
          
 def registro():
     usuario = caja_usuario.get() 
     contrasena = caja_contra.get()
-    if usuario in usuarios and usuarios[usuario] == contrasena: 
-        with open('usuario_actual.txt', 'w') as archivo: 
-            archivo.write(usuario)
+    if validar_usuario(usuario, contrasena):
         subprocess.run(['python','prueba4.py'])
         Ventana.destroy()
-    else: 
-        messagebox.showerror("Error", "Usuario o contraseña incorrectos") 
+    else:
+        messagebox.showerror("Error", "Usuario o contraseña incorrectos")
         
-def validar_usuario(): 
+"""def validar_usuario(): 
     usuario = caja_usuario.get() 
     contrasena = caja_contra.get()
     if usuario in usuarios and usuarios[usuario] == contrasena: 
         subprocess.run(['python','prueba4.py'])
         Ventana.destroy()
     else: 
-        messagebox.showerror("Error", "Usuario o contraseña incorrectos") 
+        messagebox.showerror("Error", "Usuario o contraseña incorrectos") """
 
-usuarios = cargar_usuarios()
+#usuarios = cargar_usuarios()
+
 
 # Definir el tamaño de la ventana
 ancho_ventana = 350

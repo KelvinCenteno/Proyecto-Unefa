@@ -46,8 +46,6 @@ def on_select(option):
     else:
         print("Seleccionaste la tres")
 
-
-
 text_image1 = Image.new("RGBA", (ancho_ventana, 120), (255, 255, 255, 0))
 draw1 = ImageDraw.Draw(text_image1)
 font1 = ImageFont.truetype("arialbd.ttf", 16)
@@ -367,15 +365,15 @@ def update_frame():
     root.after(5, update_frame)  # Ajustar el intervalo de tiempo para mejorar la fluidez
 
 # Iniciar la actualización de frames
-def Inicio_video(event):
-    update_frame()
+
+update_frame()
 
 # Crear imagen del logo del usuario
 Img_Home = Image.open("Home.png")
 Img_Home = Img_Home.resize((30, 30))
 Home = ImageTk.PhotoImage(Img_Home)
 usuario2 = canvas.create_image(420, 26, image=Home)
-canvas.tag_bind(usuario2, "<Button-1>", Inicio_video)
+#canvas.tag_bind(usuario2, "<Button-1>", Inicio_video)
 
 #canvas.tag_bind(asig, "<Button-1>", Inicio_video)
 
